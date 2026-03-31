@@ -50,19 +50,35 @@ def choose_game_mode():
     print("Game mode chosen succesfully\n")
     return int(game_mode)
 
-def get_bot():
-    bot = input("Enter bot adress: ")
-    print(bot)
-    botname = bot.split('/')[-1].split('.')[0]
-    result = subprocess.run([f"g++ {bot} -o {botname}"], shell=True)
-    while not result.returncode == 0:
-        print(result)
-        bot = input("Enter bot adress: ")
-        botname = bot.split('/')[-1].split('.')[0]
-        result = subprocess.run([f"g++ {bot} -o {botname}"], shell=True)
-    
-    print(f"Succesfully created bot {botname}")
+def list_bots():
+    bots_dir = os.path.join(os.path.dirname(__file__), "..", "bots")
+    return sorted(f for f in os.listdir(bots_dir) if f.endswith(".cpp"))
 
+def get_bot():
+    available = list_bots()
+    bots_dir = os.path.join(os.path.dirname(__file__), "..", "bots")
+
+    print("Available bots:")
+    for i, name in enumerate(available, 1):
+        print(f"  {i}. {name}")
+
+    choice = input("Pick a bot (number): ").strip()
+    while not choice.isdigit() or not (1 <= int(choice) <= len(available)):
+        choice = input(f"Pick a number between 1 and {len(available)}: ").strip()
+
+    bot = os.path.join(bots_dir, available[int(choice) - 1])
+    botname = available[int(choice) - 1].split('.')[0]
+    result = subprocess.run([f"g++ {bot} -o {botname}"], shell=True)
+    while result.returncode != 0:
+        print("Compilation failed, pick another bot.")
+        choice = input("Pick a bot (number): ").strip()
+        while not choice.isdigit() or not (1 <= int(choice) <= len(available)):
+            choice = input(f"Pick a number between 1 and {len(available)}: ").strip()
+        bot = os.path.join(bots_dir, available[int(choice) - 1])
+        botname = available[int(choice) - 1].split('.')[0]
+        result = subprocess.run([f"g++ {bot} -o {botname}"], shell=True)
+
+    print(f"Successfully compiled {botname}")
     return botname
 
 def get_players(game_mode):
