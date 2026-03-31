@@ -1,14 +1,16 @@
-# Compiled binaries (produced by sim.py in whatever dir you run it from)
-simulator/make-move
-simulator/bingo-v*
-simulator/bingo-v*/
+# Compiled binaries
+bin/*
+!bin/.gitkeep
 
-# Temp files created by the simulator
-simulator/temp-state.txt
-simulator/current-state.txt
-simulator/move.in
+# Temporary simulation files
+tmp/*
+!tmp/.gitkeep
 
 # Generic build artifacts
 *.o
 *.out
 a.out
+
+# Text files and other temp files
+*.txt
+*.in
