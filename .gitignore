@@ -1,0 +1,26 @@
+# Compiled binaries
+bots/me/bingo
+simulator/make-move
+
+# Bot binaries compiled during gameplay (named after bot source files)
+bots/gpt/level1
+bots/gpt/level2
+bots/gpt/level3
+bots/gpt/level4
+bots/gpt/level5
+bots/gpt/level6
+bots/gpt/level7
+
+# Temp files created by the simulator
+simulator/temp-state.txt
+simulator/current-state.txt
+simulator/move.in
+
+# Scratch files
+bots/me/input.txt
+bots/me/state.txt
+
+# Generic build artifacts
+*.o
+*.out
+a.out

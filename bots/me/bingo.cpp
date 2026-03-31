@@ -20,7 +20,9 @@ const int X = 1;
 const int O = 2;
 const int MAX_VAL = (1 << 18) - 1;
 const int MAX_DEPTH = 100;
+const int DEPTHS_WITH_CENTER_ORDER = 2;
 const long long INF = 1e12;
+
 
 /*
  * CONSTATE PUNCTAJ
@@ -334,7 +336,7 @@ long long alphabeta(long long alpha, long long beta) {
 
     long long maxScore = -INF;
     long long bestMove = 0;
-    vector<int> moves = generateMovesByStaticScore();
+    vector<int> moves = (depth >= maxDepth - DEPTHS_WITH_CENTER_ORDER ? generateMovesByCenter() : generateMovesByStaticScore());
     int options = 0;
     for (int c: moves) {
         int r = height[c];
@@ -373,6 +375,7 @@ long long alphabeta(long long alpha, long long beta) {
     if (options == 0)
         return 0;
 
+
     bestMoveOverall = bestMove;
 
     scoreStates.insert(stateGlobal, maxScore);
@@ -393,7 +396,7 @@ int main() {
 
     readInput();
 
-    maxDepth = 1;
+    maxDepth = 2;
     int move = 0;
     while (!timeUp) {
         scoreStates.clear();
