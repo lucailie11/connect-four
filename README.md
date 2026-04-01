@@ -43,5 +43,5 @@ When a bot is needed, the simulator lists the available bots and you pick by num
 - **Depth-weighted scoring** — prefers winning in fewer moves
 
 ## Requirements
-- 'python3'
+- `python3` 
 - `g++` with C++17 support
