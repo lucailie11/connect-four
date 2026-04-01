@@ -25,7 +25,7 @@ class C:
     DIM    = "\033[2m"
     X      = "\033[92m"   # bright green  – player X
     O      = "\033[91m"   # bright red    – player O
-    BOARD  = "\033[33m"   # yellow        – board dots / borders
+    BOARD  = "\033[34m"   # blue          – board dots / borders
     PROMPT = "\033[96m"   # cyan          – input prompts
     INFO   = "\033[37m"   # white         – neutral info
     ERROR  = "\033[31m"   # red           – errors
@@ -47,7 +47,7 @@ def init():
         f.write(board)
 
 def print_colored_board(text):
-    col_header = "  " + "  ".join(c(C.DIM, str(i)) for i in range(1, 8))
+    col_header = "  " + " ".join(c(C.DIM, str(i)) for i in range(1, 8))
     border     = c(C.BOARD, "┌" + "─" * 15 + "┐")
     border_bot = c(C.BOARD, "└" + "─" * 15 + "┘")
 
