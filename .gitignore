@@ -7,3 +7,15 @@ sim
 *.o
 *.out
 a.out
+
+# Executables (no extension, in bots/ and simulator/)
+bots/*
+!bots/*.cpp
+!bots/*.py
+simulator/*
+!simulator/*.cpp
+!simulator/*.py
+
+# Data files
+*.txt
+*.in
