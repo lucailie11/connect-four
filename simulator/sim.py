@@ -16,8 +16,6 @@ MAKE_MOVE     = os.path.join(BIN, "make-move")
 CURRENT_STATE = os.path.join(TMP, "current-state.txt")
 TEMP_STATE    = os.path.join(TMP, "temp-state.txt")
 
-PLAYERS = (HUMAN, HUMAN)
-
 # ── Colors ────────────────────────────────────────────────────────────────────
 class C:
     RESET  = "\033[0m"
@@ -199,8 +197,6 @@ def start_game():
     init()
     game_mode = choose_game_mode()
     players = get_players(game_mode)
-    global PLAYERS
-    PLAYERS = players
 
     section("Game Start")
     update_and_print_state()
