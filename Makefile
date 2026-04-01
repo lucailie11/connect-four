@@ -4,7 +4,7 @@ CXXFLAGS = -O2 -std=c++17
 BOTS_SRC := $(wildcard bots/*.cpp)
 BOTS_BIN := $(patsubst bots/%.cpp, bin/%, $(BOTS_SRC))
 
-.PHONY: all clean run
+.PHONY: all clean
 
 all: bin/make-move $(BOTS_BIN) sim
 
@@ -20,9 +20,6 @@ bin/%: bots/%.cpp | bin
 
 bin tmp:
 	mkdir -p $@
-
-run: all
-	python3 simulator/sim.py
 
 clean:
 	rm -f bin/make-move $(BOTS_BIN) sim
