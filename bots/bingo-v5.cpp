@@ -24,7 +24,7 @@ const int DEPTHS_WITH_CENTER_ORDER = 2;
 const long long INF = 1e12;
 
 /*
- * CONSTANTE PUNCTAJ
+ * POINT CONSTANTS
  */
 
 const int WIN_POINTS = 1e6;
