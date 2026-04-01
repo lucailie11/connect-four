@@ -1,6 +1,6 @@
-# 4-in-a-row
+# connect-four
 
-A Connect Four AI playground. The simulator lets you pit bots against each other (or yourself), while `bots/` holds the AI implementations.
+A Connect Four bot playground. The simulator lets you pit bots against each other (or yourself), while `bots/` holds the bot implementations.
 
 ## Project structure
 
@@ -10,23 +10,20 @@ simulator/       # Game engine
   make-move.cpp  # Move validator and board updater
 
 bots/
-  bingo-v1.cpp   # Fixed-depth minimax
-  bingo-v2.cpp   # + iterative deepening with time limit
-  bingo-v3.cpp   # + refined move ordering
-  bingo-v4.cpp   # + depth-weighted scoring
-  bingo-v5.cpp   # + transposition table and precomputed evaluation
-  bingo-v6.cpp   # Current version — incremental scoring + negamax
+  bingo-v1.cpp
+  ...
+  bingo-v6.cpp
 
-  claude-v1.cpp  # Greedy heuristic (no search)
-  claude-v2.cpp  # Fixed-depth alpha-beta (depth 8)
-  claude-v3.cpp  # Iterative deepening alpha-beta
+  claude-v1.cpp 
+  claude-v2.cpp
+  claude-v3.cpp
 ```
 
 ## How to run
 
 ```bash
 make      # builds bots and creates ./sim in the project root
-./sim     # start the simulator
+./sim     # starts a game
 ```
 
 You'll be prompted to choose a game mode:
