@@ -20,8 +20,8 @@ bots/
 ## How to run
 
 ```bash
-cd simulator
-python sim.py
+make      # builds bots and creates ./sim in the project root
+./sim     # start the simulator
 ```
 
 You'll be prompted to choose a game mode:
@@ -43,6 +43,5 @@ When a bot is needed, the simulator lists the available bots and you pick by num
 - **Depth-weighted scoring** — prefers winning in fewer moves
 
 ## Requirements
-
-- Python 3
+- 'python3'
 - `g++` with C++17 support

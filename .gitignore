@@ -1,16 +1,9 @@
-# Compiled binaries
-bin/*
-!bin/.gitkeep
-
-# Temporary simulation files
-tmp/*
-!tmp/.gitkeep
+# Compiled binaries and build output
+bin/
+tmp/
+sim
 
 # Generic build artifacts
 *.o
 *.out
 a.out
-
-# Text files and other temp files
-*.txt
-*.in

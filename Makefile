@@ -6,7 +6,11 @@ BOTS_BIN := $(patsubst bots/%.cpp, bin/%, $(BOTS_SRC))
 
 .PHONY: all clean run
 
-all: bin/make-move $(BOTS_BIN)
+all: bin/make-move $(BOTS_BIN) sim
+
+sim: simulator/sim.py
+	@printf '#!/bin/sh\nexec python3 "%s/simulator/sim.py" "$$@"\n' "$(CURDIR)" > sim
+	@chmod +x sim
 
 bin/make-move: simulator/make-move.cpp | bin tmp
 	$(CXX) $(CXXFLAGS) $< -o $@
@@ -21,5 +25,5 @@ run: all
 	python3 simulator/sim.py
 
 clean:
-	rm -f bin/make-move $(BOTS_BIN)
+	rm -f bin/make-move $(BOTS_BIN) sim
 	rm -f tmp/*.txt tmp/*.in
