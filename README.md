@@ -14,7 +14,12 @@ bots/
   bingo-v2.cpp   # + iterative deepening with time limit
   bingo-v3.cpp   # + refined move ordering
   bingo-v4.cpp   # + depth-weighted scoring
-  bingo-v5.cpp   # Current version
+  bingo-v5.cpp   # + transposition table and precomputed evaluation
+  bingo-v6.cpp   # Current version — incremental scoring + negamax
+
+  claude-v1.cpp  # Greedy heuristic (no search)
+  claude-v2.cpp  # Fixed-depth alpha-beta (depth 8)
+  claude-v3.cpp  # Iterative deepening alpha-beta
 ```
 
 ## How to run
@@ -34,13 +39,22 @@ When a bot is needed, the simulator lists the available bots and you pick by num
 
 ## How the bingo bot works
 
-`bingo-v5.cpp` uses **minimax with alpha-beta pruning** and several optimizations:
+bingo bots use **negamax with alpha-beta pruning** and progressively add optimizations across versions v1–v6:
 
 - **Iterative deepening** — searches deeper and deeper until the 950ms time limit
+- **Precomputed evaluation** — lookup tables for all possible row/column/diagonal configurations (3^n states) for fast scoring
+- **Incremental scoring** — updates only the affected row/column/diagonals on each move instead of re-evaluating the full board
 - **Transposition table** — caches board states via Zobrist hashing to avoid redundant evaluation
-- **Move ordering** — tries center columns first and orders by static score, improving pruning efficiency
-- **Precomputed evaluation** — lookup tables for all possible row/column/diagonal configurations (3^7 states) for fast scoring
+- **Move ordering** — center-first for shallow plies, static-score-ordered for deeper plies, improving pruning efficiency
 - **Depth-weighted scoring** — prefers winning in fewer moves
+
+## How the claude bots work
+
+claude bots use **alpha-beta pruning** and progressively add optimizations across versions v1–v3:
+
+- **Greedy win/block** — immediately takes a winning move or blocks the opponent's before doing any search
+- **Move ordering** — center-first, then dynamic ordering by static score, improving pruning efficiency
+- **Iterative deepening** — searches deeper and deeper until the 950ms time limit
 
 ## Requirements
 - `python3` 
