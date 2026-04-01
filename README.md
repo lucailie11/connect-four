@@ -1,6 +1,6 @@
 # connect-four
 
-A Connect Four bot playground. The simulator lets you pit bots against each other (or yourself), while `bots/` holds the bot implementations.
+A Connect Four bot playground. The simulator lets you put bots against each other (or yourself), while `bots/` holds the bot implementations.
 
 ## Project structure
 
