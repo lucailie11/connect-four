@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <utility>
 
 using namespace std;
 
@@ -11,6 +10,8 @@ const string INVALID = "INVALID";
 const string DRAW = "DRAW";
 const string WIN_X = "WIN X";
 const string WIN_O = "WIN O";
+const char X = 'X';
+const char O = 'O';
 
 bool is_valid_move(const vector<string> &board, int col) {
   return col >= 0 && col < COLS && board[0][col] == '.';
@@ -53,8 +54,8 @@ char current_player(const vector<string> &board) {
   int x = 0, o = 0;
   for (auto &row : board)
     for (char c : row)
-      x += (c == 'X'), o += (c == 'O');
-  return (x <= o ? 'X' : 'O');
+      x += (c == X), o += (c == O);
+  return (x <= o ? X : O);
 }
 
 int main(int argc, char *argv[]) {
@@ -62,6 +63,7 @@ int main(int argc, char *argv[]) {
     cerr << "Usage: make-move <column>\n";
     return 1;
   }
+
   int col;
   try { col = stoi(argv[1]) - 1; }
   catch (...) { cerr << INVALID << "\n"; return 0; }

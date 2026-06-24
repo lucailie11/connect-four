@@ -18,7 +18,7 @@ MAKE_MOVE     = os.path.join(BIN, "make-move")
 CURRENT_STATE = os.path.join(TMP, "current-state.txt")
 TEMP_STATE    = os.path.join(TMP, "temp-state.txt")
 
-class C:
+class COLORS:
     RESET  = "\033[0m"
     BOLD   = "\033[1m"
     DIM    = "\033[2m"
@@ -31,15 +31,15 @@ class C:
     WIN    = "\033[95m"   # magenta       – win announcement
     MENU   = "\033[34m"   # blue          – menus
 
-def c(color, text):
-    return f"{color}{text}{C.RESET}"
+def color(color, text):
+    return f"{color}{text}{COLORS.RESET}"
 
 def bold(color, text):
-    return f"{C.BOLD}{color}{text}{C.RESET}"
+    return f"{COLORS.BOLD}{color}{text}{COLORS.RESET}"
 
 def init():
     if not os.path.isfile(MAKE_MOVE):
-        print(c(C.ERROR, "  Error: bin/make-move not found. Run 'make' first."))
+        print(color(COLORS.ERROR, "  Error: bin/make-move not found. Run 'make' first."))
         sys.exit(1)
     os.makedirs(TMP, exist_ok=True)
     board = (".......\n" * 6)
@@ -49,9 +49,9 @@ def init():
         f.write(board)
 
 def print_colored_board(text):
-    col_header = "  " + " ".join(c(C.DIM, str(i)) for i in range(1, 8))
-    border     = c(C.BOARD, "┌" + "─" * 15 + "┐")
-    border_bot = c(C.BOARD, "└" + "─" * 15 + "┘")
+    col_header = "  " + " ".join(color(COLORS.DIM, str(i)) for i in range(1, 8))
+    border     = color(COLORS.BOARD, "┌" + "─" * 15 + "┐")
+    border_bot = color(COLORS.BOARD, "└" + "─" * 15 + "┘")
 
     print()
     print(col_header)
@@ -61,12 +61,12 @@ def print_colored_board(text):
         rendered = ""
         for ch in row:
             if ch == 'X':
-                rendered += bold(C.X, "X") + c(C.BOARD, " ")
+                rendered += bold(COLORS.X, "X") + color(COLORS.BOARD, " ")
             elif ch == 'O':
-                rendered += bold(C.O, "O") + c(C.BOARD, " ")
+                rendered += bold(COLORS.O, "O") + color(COLORS.BOARD, " ")
             else:
-                rendered += c(C.BOARD, "· ")
-        print(c(C.BOARD, "│ ") + rendered.rstrip() + c(C.BOARD, "│"))
+                rendered += color(COLORS.BOARD, "· ")
+        print(color(COLORS.BOARD, "│ ") + rendered.rstrip() + color(COLORS.BOARD, "│"))
 
     print(border_bot)
     print()
@@ -78,46 +78,39 @@ def update_and_print_state():
     print_colored_board(state)
 
 def section(title):
-    bar = c(C.MENU, "─" * 38)
-    print(f"\n{bar}")
-    print(bold(C.MENU, f"  {title}"))
-    print(f"{bar}\n")
+    bar = color(COLORS.MENU, "─" * 38)
+    print(f"\n{bar}\n {bold(COLORS.MENU, f"  {title}")} \n{bar}\n")
 
 def choose_game_mode():
     section("Game Mode")
-    print(f"  {c(C.MENU, '1.')} Human vs Human")
-    print(f"  {c(C.MENU, '2.')} Human vs Bot")
-    print(f"  {c(C.MENU, '3.')} Bot vs Bot\n")
-    game_mode = input(c(C.PROMPT, "  Choose game mode [1-3]: "))
+    print(f"  {color(COLORS.MENU, '1.')} Human vs Human")
+    print(f"  {color(COLORS.MENU, '2.')} Human vs Bot")
+    print(f"  {color(COLORS.MENU, '3.')} Bot vs Bot\n")
+    game_mode = input(color(COLORS.PROMPT, "  Choose game mode [1-3]: "))
     while game_mode not in ['1', '2', '3']:
-        print(c(C.ERROR, "  Invalid choice. Please enter 1, 2, or 3."))
-        game_mode = input(c(C.PROMPT, "  Choose game mode [1-3]: "))
-    print(c(C.INFO, "\n  Game mode chosen.\n"))
+        print(color(COLORS.ERROR, "  Invalid choice. Please enter 1, 2, or 3."))
+        game_mode = input(color(COLORS.PROMPT, "  Choose game mode [1-3]: "))
+    print(color(COLORS.INFO, "\n  Game mode chosen.\n"))
     return int(game_mode)
 
 def list_bots():
-    return sorted(
-        f for f in os.listdir(BIN)
-        if f != 'make-move'
-        and os.path.isfile(os.path.join(BIN, f))
-        and os.access(os.path.join(BIN, f), os.X_OK)
-    )
+    return sorted(f for f in os.listdir(BIN) if f != 'make-move')
 
 def get_bot():
     available = list_bots()
     if not available:
-        print(c(C.ERROR, "  No bots found in bin/. Run 'make' first."))
+        print(color(COLORS.ERROR, "  No bots found in bin/. Run 'make' first."))
         sys.exit(1)
 
     section("Select Bot")
     for i, name in enumerate(available, 1):
-        print(f"  {c(C.MENU, str(i) + '.')} {name}")
+        print(f"  {color(COLORS.MENU, str(i) + '.')} {name}")
     print()
 
-    choice = input(c(C.PROMPT, "  Pick a bot (number): ")).strip()
+    choice = input(color(COLORS.PROMPT, "  Pick a bot (number): ")).strip()
     while not choice.isdigit() or not (1 <= int(choice) <= len(available)):
-        print(c(C.ERROR, f"  Please enter a number between 1 and {len(available)}."))
-        choice = input(c(C.PROMPT, "  Pick a bot (number): ")).strip()
+        print(color(COLORS.ERROR, f"  Please enter a number between 1 and {len(available)}."))
+        choice = input(color(COLORS.PROMPT, "  Pick a bot (number): ")).strip()
 
     return os.path.join(BIN, available[int(choice) - 1])
 
@@ -128,10 +121,10 @@ def get_players(game_mode):
         return (get_bot(), get_bot())
 
     print()
-    first = input(c(C.PROMPT, "  Do you want to play first? [y/n]: "))
+    first = input(color(COLORS.PROMPT, "  Do you want to play first? [y/n]: "))
     while first not in ['y', 'Y', 'n', 'N']:
-        print(c(C.ERROR, "  Please enter y or n."))
-        first = input(c(C.PROMPT, "  Do you want to play first? [y/n]: "))
+        print(color(COLORS.ERROR, "  Please enter y or n."))
+        first = input(color(COLORS.PROMPT, "  Do you want to play first? [y/n]: "))
 
     if first in ('y', 'Y'):
         return (HUMAN, get_bot())
@@ -148,19 +141,19 @@ def make_move(move):
     return result.stderr.strip()
 
 def play_round_by_human(player_id):
-    piece_color = C.X if player_id == 0 else C.O
-    prompt = c(C.PROMPT, "  Enter column ") + bold(piece_color, f"[1-7]") + c(C.PROMPT, ": ")
+    piece_color = COLORS.X if player_id == 0 else COLORS.O
+    prompt = color(COLORS.PROMPT, "  Enter column ") + bold(piece_color, f"[1-7]") + color(COLORS.PROMPT, ": ")
 
     move = input(prompt)
     result = make_move(move)
 
     while result == INVALID:
         if not move.isdigit():
-            print(c(C.ERROR, f"  \"{move}\" is not a valid column — please enter a number from 1 to 7."))
+            print(color(COLORS.ERROR, f"  \"{move}\" is not a valid column — please enter a number from 1 to 7."))
         elif not (1 <= int(move) <= 7):
-            print(c(C.ERROR, f"  Column {move} is out of range — please enter a number from 1 to 7."))
+            print(color(COLORS.ERROR, f"  Column {move} is out of range — please enter a number from 1 to 7."))
         else:
-            print(c(C.ERROR, f"  Column {move} is full — choose a different column."))
+            print(color(COLORS.ERROR, f"  Column {move} is full — choose a different column."))
         move = input(prompt)
         result = make_move(move)
 
@@ -171,16 +164,16 @@ def play_round_by_bot(player, player_id):
         result = subprocess.run([player], stdin=stdin, capture_output=True, text=True)
     move = result.stdout.strip()
     if result.returncode == 0:
-        print(c(C.INFO, f"  Bot plays column {move}"))
+        print(color(COLORS.INFO, f"  Bot plays column {move}"))
         return make_move(move)
-    print(c(C.ERROR, f"  Bot crashed (exit code {result.returncode}) — opponent wins."))
+    print(color(COLORS.ERROR, f"  Bot crashed (exit code {result.returncode}) — opponent wins."))
     return WINS[player_id ^ 1]
 
 def play_round(player, player_id):
-    piece_color = C.X if player_id == 0 else C.O
+    piece_color = COLORS.X if player_id == 0 else COLORS.O
     label = bold(piece_color, PIECES[player_id])
     kind  = "Human" if player == HUMAN else "Bot"
-    print(c(C.INFO, f"  Player ") + label + c(C.INFO, f" ({kind}) to move"))
+    print(color(COLORS.INFO, f"  Player ") + label + color(COLORS.INFO, f" ({kind}) to move"))
 
     if player == HUMAN:
         return play_round_by_human(player_id)
@@ -189,11 +182,11 @@ def play_round(player, player_id):
 def announce_result(result):
     print()
     if result == WINS[0]:
-        print(bold(C.WIN, "  ★  Player X wins!  ★"))
+        print(bold(COLORS.WIN, "  ★  Player X wins!  ★"))
     elif result == WINS[1]:
-        print(bold(C.WIN, "  ★  Player O wins!  ★"))
+        print(bold(COLORS.WIN, "  ★  Player O wins!  ★"))
     else:
-        print(bold(C.WIN, "  It's a draw!"))
+        print(bold(COLORS.WIN, "  It's a draw!"))
     print()
 
 def start_game():
