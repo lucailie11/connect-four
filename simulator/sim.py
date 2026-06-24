@@ -2,6 +2,7 @@
 import subprocess
 import os
 import shutil
+import sys
 
 HUMAN = "HUMAN"
 PIECES = ['X', 'O']
@@ -39,7 +40,7 @@ def bold(color, text):
 def init():
     if not os.path.isfile(MAKE_MOVE):
         print(c(C.ERROR, "  Error: bin/make-move not found. Run 'make' first."))
-        exit(1)
+        sys.exit(1)
     os.makedirs(TMP, exist_ok=True)
     board = (".......\n" * 6)
     with open(CURRENT_STATE, 'w') as f:
@@ -106,7 +107,7 @@ def get_bot():
     available = list_bots()
     if not available:
         print(c(C.ERROR, "  No bots found in bin/. Run 'make' first."))
-        exit(1)
+        sys.exit(1)
 
     section("Select Bot")
     for i, name in enumerate(available, 1):
@@ -187,9 +188,9 @@ def play_round(player, player_id):
 
 def announce_result(result):
     print()
-    if result == "WIN X":
+    if result == WINS[0]:
         print(bold(C.WIN, "  ★  Player X wins!  ★"))
-    elif result == "WIN O":
+    elif result == WINS[1]:
         print(bold(C.WIN, "  ★  Player O wins!  ★"))
     else:
         print(bold(C.WIN, "  It's a draw!"))
@@ -213,4 +214,5 @@ def start_game():
     update_and_print_state()
     announce_result(result)
 
-start_game()
+if __name__ == "__main__":
+    start_game()
