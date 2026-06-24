@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import subprocess
 import os
+import shutil
 
-HUMAN = ""
+HUMAN = "HUMAN"
 PIECES = ['X', 'O']
 WINS = ["WIN X", "WIN O"]
 VALID = "VALID"
@@ -16,7 +17,6 @@ MAKE_MOVE     = os.path.join(BIN, "make-move")
 CURRENT_STATE = os.path.join(TMP, "current-state.txt")
 TEMP_STATE    = os.path.join(TMP, "temp-state.txt")
 
-# ── Colors ────────────────────────────────────────────────────────────────────
 class C:
     RESET  = "\033[0m"
     BOLD   = "\033[1m"
@@ -36,7 +36,6 @@ def c(color, text):
 def bold(color, text):
     return f"{C.BOLD}{color}{text}{C.RESET}"
 
-# ── Board ─────────────────────────────────────────────────────────────────────
 def init():
     board = (".......\n" * 6)
     with open(CURRENT_STATE, 'w') as f:
@@ -68,12 +67,11 @@ def print_colored_board(text):
     print()
 
 def update_and_print_state():
-    subprocess.run([f"cp {TEMP_STATE} {CURRENT_STATE}"], shell=True)
+    shutil.copy(TEMP_STATE, CURRENT_STATE)
     with open(CURRENT_STATE) as infile:
         state = infile.read()
     print_colored_board(state)
 
-# ── Setup ─────────────────────────────────────────────────────────────────────
 def section(title):
     bar = c(C.MENU, "─" * 38)
     print(f"\n{bar}")
@@ -134,15 +132,14 @@ def get_players(game_mode):
         return (HUMAN, get_bot())
     return (get_bot(), HUMAN)
 
-# ── Gameplay ──────────────────────────────────────────────────────────────────
 def make_move(move):
     if not move.isdigit():
         return INVALID
 
-    result = subprocess.run(
-        [f"{MAKE_MOVE} {int(move)} < {CURRENT_STATE} > {TEMP_STATE}"],
-        shell=True, capture_output=True, text=True
-    )
+    with open(CURRENT_STATE) as stdin, open(TEMP_STATE, 'w') as stdout:
+        result = subprocess.run(
+            [MAKE_MOVE, str(int(move))], stdin=stdin, stdout=stdout, stderr=subprocess.PIPE, text=True
+        )
     return result.stderr.strip()
 
 def play_round_by_human(player_id):
@@ -165,7 +162,8 @@ def play_round_by_human(player_id):
     return result
 
 def play_round_by_bot(player, player_id):
-    result = subprocess.run([f"{player} < {CURRENT_STATE}"], shell=True, capture_output=True, text=True)
+    with open(CURRENT_STATE) as stdin:
+        result = subprocess.run([player], stdin=stdin, capture_output=True, text=True)
     move = result.stdout.strip()
     if result.returncode == 0:
         print(c(C.INFO, f"  Bot plays column {move}"))
@@ -192,7 +190,6 @@ def announce_result(result):
         print(bold(C.WIN, "  It's a draw!"))
     print()
 
-# ── Main ──────────────────────────────────────────────────────────────────────
 def start_game():
     init()
     game_mode = choose_game_mode()
