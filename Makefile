@@ -7,6 +7,7 @@ BOTS_BIN := $(patsubst bots/%.cpp, bin/%, $(BOTS_SRC))
 .PHONY: all clean
 
 all: bin/make-move $(BOTS_BIN) sim
+	@ echo 'Everything is ready! Start playing connect-four by running ./sim!'
 
 sim: simulator/sim.py
 	@ printf '#!/bin/sh\nexec python3 "%s/simulator/sim.py" "$$@"\n' "$(CURDIR)" > sim
