@@ -53,6 +53,14 @@ claude bots use **alpha-beta pruning** and progressively add optimizations acros
 - **Move ordering** — center-first, then dynamic ordering by static score, improving pruning efficiency
 - **Iterative deepening** — searches deeper and deeper until the 950ms time limit
 
+## Writing your own bot
+
+A bot is any executable that:
+- reads the current board state from **stdin** (6 lines of 7 characters, `.` for empty, `X`/`O` for pieces)
+- prints a single column number (1–7) to **stdout**
+
+Drop the compiled binary in `bin/` and it will appear in the bot selector automatically.
+
 ## Requirements
 - `python3` 
 - `g++` with C++17 support
