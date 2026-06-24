@@ -9,17 +9,20 @@ BOTS_BIN := $(patsubst bots/%.cpp, bin/%, $(BOTS_SRC))
 all: bin/make-move $(BOTS_BIN) sim
 
 sim: simulator/sim.py
-	@printf '#!/bin/sh\nexec python3 "%s/simulator/sim.py" "$$@"\n' "$(CURDIR)" > sim
-	@chmod +x sim
+	@ printf '#!/bin/sh\nexec python3 "%s/simulator/sim.py" "$$@"\n' "$(CURDIR)" > sim
+	@ chmod +x sim
 
-bin/make-move: simulator/make-move.cpp | bin tmp
-	$(CXX) $(CXXFLAGS) $< -o $@
+bin/make-move: simulator/make-move.cpp | bin
+	@ $(CXX) $(CXXFLAGS) $< -o $@
+	@ echo '$@ compiled succesfully!!'
 
 bin/%: bots/%.cpp | bin
-	$(CXX) $(CXXFLAGS) $< -o $@
+	@ $(CXX) $(CXXFLAGS) $< -o $@
+	@ echo '$@ compiled succesfully!!'
 
-bin tmp:
-	mkdir -p $@
+bin:
+	@ mkdir -p $@
 
 clean:
-	rm -rf bin tmp sim
+	@ rm -rf bin tmp sim
+	@ echo 'Everything cleaned up!!'
