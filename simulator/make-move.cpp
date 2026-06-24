@@ -1,4 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
 
 using namespace std;
 
@@ -55,8 +58,13 @@ char current_player(const vector<string> &board) {
 }
 
 int main(int argc, char *argv[]) {
-  assert(argc == 2);
-  int col = atoi(argv[1]) - 1;
+  if (argc != 2) {
+    cerr << "Usage: make-move <column>\n";
+    return 1;
+  }
+  int col;
+  try { col = stoi(argv[1]) - 1; }
+  catch (...) { cerr << INVALID << "\n"; return 0; }
 
   vector<string> board(ROWS);
   for (int i = 0; i < ROWS; ++i)
