@@ -22,5 +22,4 @@ bin tmp:
 	mkdir -p $@
 
 clean:
-	rm -f bin/make-move $(BOTS_BIN) sim
-	rm -f tmp/*.txt tmp/*.in
+	rm -rf bin tmp sim
