@@ -37,6 +37,10 @@ def bold(color, text):
     return f"{C.BOLD}{color}{text}{C.RESET}"
 
 def init():
+    if not os.path.isfile(MAKE_MOVE):
+        print(c(C.ERROR, "  Error: bin/make-move not found. Run 'make' first."))
+        exit(1)
+    os.makedirs(TMP, exist_ok=True)
     board = (".......\n" * 6)
     with open(CURRENT_STATE, 'w') as f:
         f.write(board)
@@ -93,7 +97,7 @@ def choose_game_mode():
 def list_bots():
     return sorted(
         f for f in os.listdir(BIN)
-        if f not in ('make-move', '.gitkeep')
+        if f != 'make-move'
         and os.path.isfile(os.path.join(BIN, f))
         and os.access(os.path.join(BIN, f), os.X_OK)
     )
@@ -168,6 +172,7 @@ def play_round_by_bot(player, player_id):
     if result.returncode == 0:
         print(c(C.INFO, f"  Bot plays column {move}"))
         return make_move(move)
+    print(c(C.ERROR, f"  Bot crashed (exit code {result.returncode}) — opponent wins."))
     return WINS[player_id ^ 1]
 
 def play_round(player, player_id):
